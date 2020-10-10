@@ -13,7 +13,7 @@ let registerData = {
 describe(' Admin testing ', () => {
   
   describe('checking the Login for Admin', async() => {
-    it('check the login', (done) => {
+    it('check the login', () => {
       request(app)
         .post('/api/admin/login')
         .send(registerData)
@@ -24,17 +24,17 @@ describe(' Admin testing ', () => {
           expect(res.body.token).to.be.a('string');
           
         });
-        done();
+        //done();
     });
   
-    it('throws the error if the body is null', (done) => {
+    it('throws the error if the body is null', () => {
       request(app)
         .post('/api/admin/login')
         .send({username: "", password: ""})
         .end(function (err, res) {
           expect(res.body.isLogined).to.equal(false);
         });
-        done();
+        //done();
     });
   });
 });

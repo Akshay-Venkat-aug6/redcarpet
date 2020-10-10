@@ -16,7 +16,7 @@ let registerData = {
 describe(' User testing ', () => {
   
   describe('checking the Register and Login', async() => {
-    it('register the valid user', (done) => {
+    it('register the valid user', () => {
       request(app)
         .post('/api/register')
         .send(registerData)
@@ -24,21 +24,21 @@ describe(' User testing ', () => {
         .end(function (err, res) {
           expect(res.body.isRegistered).to.be.equal(true);
           expect(res.body.token).to.be.a('string');
-          done();
+          //done();
         });
     });
   
-    it('throws the error if the email is Already registered', (done) => {
+    it('throws the error if the email is Already registered', () => {
       request(app)
         .post('/api/register')
         .send(registerData)
         .end(function (err, res) {
           expect(res.body.isRegistered).to.be.equal(false);
-          done();
+          //done();
         });
     });
   
-    it('throws the error if the body is null', (done) => {
+    it('throws the error if the body is null', () => {
       let registers = {
         username: registerData.username,
         email: registerData.email,
@@ -52,13 +52,13 @@ describe(' User testing ', () => {
         .end(function (err, res) {
           expect(res.body.isRegistered).to.equal(false);
           expect(res.body.message).to.be.a('string');
-            done();
+            //done();
         });
     });
   });
 
   describe('getting array of the agent list', () => {
-    it('Thorws an error if trying to access the page without login', (done) => {
+    it('Thorws an error if trying to access the page without login', () => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -70,7 +70,7 @@ describe(' User testing ', () => {
         .end((err, res) => {
           const token = res.body.token
           describe('Check The Home Page', () => {
-            it('Access The Page after Login', (done) => {
+            it('Access The Page after Login', () => {
               request(app)
                 .get('/api/customer/home')
                 .set("authorization", token)
@@ -79,11 +79,11 @@ describe(' User testing ', () => {
                   expect(res.body.user).to.be.a('object')
                   expect(res.body.agent).to.be.a('array')
                   expect(res.body.isAuthenticaed).to.equal(true);
-                  done(); 
+                  //done(); 
                 });
             });
             
-            it('Thorws an error if trying to access the page without Login', (done) => {
+            it('Thorws an error if trying to access the page without Login', () => {
               request(app)
                 .get('/api/customer/home')
                 .set("authorization", '')
@@ -91,11 +91,11 @@ describe(' User testing ', () => {
                   // console.log(res.body)
                   expect(res.body.isTokenVerified).to.equal(false);
                   expect(res.body.message).to.equal('Token is Invalid!!!');
-                  done(); 
+                  //done(); 
                 });
             });
 
-            it('list the loan of the User', (done) => {
+            it('list the loan of the User', () => {
               request(app)
                 .get('/api/customer/view/loan')
                 .set("authorization", token)
@@ -104,27 +104,27 @@ describe(' User testing ', () => {
                   expect(res.body.loanDetail).to.be.a('array');
                   
                 });
-                done(); 
+                //done(); 
             });
 
-            it('Throw error if list the loan of the User is not login', (done) => {
+            it('Throw error if list the loan of the User is not login', () => {
               request(app)
                 .get('/api/customer/view/loan')
                 .set("authorization", '')
                 .end((err, res) => {
                   expect(res.body.isTokenVerified).to.equal(false);
-                  done(); 
+                  //done(); 
                 });
             });
 
           });
-          done();
+          //done();
         })
     });
   });
 
   describe('Login Crdentials testing', () => {
-    it('login Successfully message', (done) => {
+    it('login Successfully message', () => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -137,11 +137,11 @@ describe(' User testing ', () => {
           expect(res.body.isLogined).to.equal(true);
           expect(res.body.message).to.equal('Login Completed SuccssFully!!!');
           
-          done();
+          //done();
         })
     });
 
-    it('Throw error if the body is null', (done) => {
+    it('Throw error if the body is null', () => {
       let userData = {
         useremail: registerData.email,
         password: '',
@@ -153,11 +153,11 @@ describe(' User testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(false);
           expect(res.body.message).to.equal('All details should be filled to Login');
-          done();
+          //done();
         })
     });
 
-    it('Throw error if the password is incorrect', (done) => {
+    it('Throw error if the password is incorrect', () => {
       let userData = {
         useremail: registerData.email,
         password: '12345678',
@@ -169,11 +169,11 @@ describe(' User testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(false);
           expect(res.body.message).to.equal('Password is Invalid');
-          done();
+          //done();
         })
     });
 
-    it('Throw error if the Email is not registered', (done) => {
+    it('Throw error if the Email is not registered', () => {
       let userData = {
         useremail: 'akshay28@gmail.com',
         password: registerData.password,
@@ -185,7 +185,7 @@ describe(' User testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(false);
           expect(res.body.message).to.equal('Email is not yet registered!!');
-          done();
+          //done();
         })
     });
   });

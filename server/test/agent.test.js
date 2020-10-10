@@ -17,7 +17,7 @@ let registerData = {
 describe(' Agent testing ', () => {
   
   describe('checking the Register and Login for Agent', async() => {
-    it('register the valid agent', (done) => {
+    it('register the valid agent', () => {
       request(app)
         .post('/api/register')
         .send(registerData)
@@ -25,22 +25,22 @@ describe(' Agent testing ', () => {
         .end(function (err, res) {
           expect(res.body.isRegistered).to.be.equal(true);
           expect(res.body.token).to.be.a('string');
-          done();
+          //done();
         });
     });
   
-    it('throws the error if the email is Already registered', (done) => {
+    it('throws the error if the email is Already registered', () => {
       // console.log(registerData)
       request(app)
         .post('/api/register')
         .send(registerData)
         .end(function (err, res) {
           expect(res.body.isRegistered).to.be.equal(false);
-          done();
+          //done();
         });
     });
   
-    it('throws the error if the body is null', (done) => {
+    it('throws the error if the body is null', () => {
       let registers = {
         username: registerData.username,
         email: registerData.email,
@@ -54,13 +54,13 @@ describe(' Agent testing ', () => {
         .end(function (err, res) {
           expect(res.body.isRegistered).to.equal(false);
           expect(res.body.message).to.be.a('string');
-            done();
+            //done();
         });
     });
   });
 
   describe('Home Page of the agent list', () => {
-    it('Render the Home Page with the proper type', (done) => {
+    it('Render the Home Page with the proper type', () => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -79,10 +79,10 @@ describe(' Agent testing ', () => {
               expect(res.body.agent).to.be.a('object');
               expect(res.body.user).to.be.a('array');
             })
-          done();
+          //done();
         })
     });
-    it('Throw error if the Agent tries to acces home page withour login', (done) => {
+    it('Throw error if the Agent tries to acces home page withour login', () => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -102,12 +102,12 @@ describe(' Agent testing ', () => {
               
             })
         })
-        done();
+        //done();
     });
   });
 
   describe('Create the Loan ', () => {
-    it('Render the Correct Loan Details ', async(done) => {
+    it('Render the Correct Loan Details ', async() => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -149,12 +149,12 @@ describe(' Agent testing ', () => {
               
             });
         });
-        done();
+        //done();
     });
   });
 
   describe('Accessing the Home Page ', () => {
-    it('Render the Correct Loan Details ', async(done) => {
+    it('Render the Correct Loan Details ', async() => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -173,22 +173,22 @@ describe(' Agent testing ', () => {
               expect(res.body.loanDetail).to.be.a('array')
             });
         });
-      done();
+      //done();
     });
 
-    it('Throws an error if User does not login and try to accessing the Home Page', async(done) => {
+    it('Throws an error if User does not login and try to accessing the Home Page', async() => {
       request(app)
         .get('/api/agent/view/loan')
         .set('authorization', '')
         .end((err, res) => {
           expect(res.body.isTokenVerified).to.equal(false)
         });
-      done();
+      //done();
     });
   });
 
   describe('Login Crdentials testing for agent', () => {
-    it('login Successfully message', (done) => {
+    it('login Successfully message', () => {
       let userData = {
         useremail: registerData.email,
         password: registerData.password,
@@ -200,12 +200,11 @@ describe(' Agent testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(true);
           expect(res.body.message).to.equal('Login Completed SuccssFully!!!');
-          
-          done();
+          //done();
         })
     });
 
-    it('Throw error if the body is null', (done) => {
+    it('Throw error if the body is null', () => {
       let userData = {
         useremail: registerData.email,
         password: '',
@@ -217,11 +216,11 @@ describe(' Agent testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(false);
           expect(res.body.message).to.equal('All details should be filled to Login');
-          done();
+          //done();
         })
     });
 
-    it('Throw error if the password is incorrect', (done) => {
+    it('Throw error if the password is incorrect', () => {
       let userData = {
         useremail: registerData.email,
         password: '12345678',
@@ -233,11 +232,11 @@ describe(' Agent testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(false);
           expect(res.body.message).to.equal('Password is Invalid');
-          done();
+          //done();
         })
     });
 
-    it('Throw error if the Email is not registered', (done) => {
+    it('Throw error if the Email is not registered', () => {
       let userData = {
         useremail: 'akshay28@gmail.com',
         password: registerData.password,
@@ -249,15 +248,14 @@ describe(' Agent testing ', () => {
         .end((err, res) => {
           expect(res.body.isLogined).to.equal(false);
           expect(res.body.message).to.equal('Email is not yet registered!!');
-          done();
+          //done();
         })
     });
   });
 
 });
 
-setTimeout(() => {
-  after(async() => {
-    await User.deleteOne({email: registerData.email, role: registerData.role})
-  });
-})
+after(async(done) => {
+  await User.deleteOne({email: registerData.email, role: registerData.role})
+  done();
+});
